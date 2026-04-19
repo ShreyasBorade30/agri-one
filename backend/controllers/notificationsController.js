@@ -1,68 +1,47 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import Groq from "groq-sdk";
 
-export const getFarmingAlerts = async (req, res) => {
+export const getFarmingNotifications = async (req, res) => {
     dotenv.config();
+    if (!process.env.GROQ_API_KEY) {
+        return res.status(500).json({ error: "GROQ_API_KEY is missing" });
+    }
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const weather_key = process.env.OPENWEATHER_API_KEY || '5536c8262dea91ac474b5aa15fa5c774';
     
-    // Retrieve parameters from query string
+    // Retrieve region from query string
     const { region } = req.query;
+    const city = region || 'Kolkata';
 
     try {
-        // Construct a concise prompt for the API to generate farming alerts and notifications
-        const promptText = `
-            Please provide a maximum of 2 short and recent farming alerts or notifications in max 5-6 words related to farming weather and conditions, specifically for the region of ${region}.
+        // STEP 1: Fetch real-time weather for the region
+        const weatherResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather_key}&units=metric`);
+        const weather = weatherResponse.data;
+        
+        const temp = weather.main.temp;
+        const condition = weather.weather[0].description;
+        const humidity = weather.main.humidity;
 
-            Focus on:
-            - Important weather-related alerts relevant to farming today.
-            - Any immediate farming precautions or actions farmers should take.
+        // STEP 2: Ask Groq AI to generate alerts based on THIS weather
+        const promptText = `You are an AI Farming Assistant. Current weather in ${city}: ${temp}°C, ${condition}, Humidity: ${humidity}%. 
+        Based on this REAL-TIME data, provide 2 very short farming alerts (max 6 words each). 
+        If it's rainy, warn about fertilizers. If too hot, suggest irrigation. 
+        Return ONLY the alerts, one per line. No introduction.`;
 
-            Keep each alert clear, brief, and farmer-friendly. Thank you!
-        `;
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [{ role: "user", content: promptText }],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.3,
+        });
 
-        const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-            {
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: promptText.trim(), // Trim whitespace from the prompt text
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
+        const alerts = chatCompletion.choices[0]?.message?.content || "Check weather conditions for your crops.";
+        console.log(`Dynamic Alerts for ${city} generated.`);
+        res.status(200).json({ alerts });
 
-        // Log the entire response for debugging
-        console.log(response.data.candidates);
-
-        // Check if response contains candidates
-        if (response.data.candidates && response.data.candidates.length > 0) {
-            // Log the structure of the content object to understand its properties
-            console.log(JSON.stringify(response.data.candidates[0].content, null, 2));
-
-            // Extract the alert text from the parts array
-            const parts = response.data.candidates[0].content.parts; // Access the parts array
-
-            if (parts && parts.length > 0) {
-                const alerts = parts[0].text; // Get the text from the first part
-                res.status(200).json({ alerts });
-            } else {
-                console.error("No parts found in the content.");
-                res.status(404).json({ error: "No alerts found" });
-            }
-        } else {
-            console.error("No candidates found in the response.");
-            res.status(404).json({ error: "No alerts found" });
-        }
     } catch (err) {
-        console.error("Error fetching farming alerts: ", err);
-        res.status(500).json({ error: "Failed to fetch alerts" });
+        console.error("Error generating dynamic alerts: ", err.message);
+        // Fallback to a semi-dynamic message if API fails
+        res.status(200).json({ alerts: "Monitor local weather. Ensure proper crop hydration." });
     }
 };

@@ -1,8 +1,8 @@
 import express from 'express'
-import { getFarmingAlerts } from '../controllers/notificationsController.js'
+import { getFarmingNotifications } from '../controllers/notificationsController.js'
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/farming-notifications',getFarmingAlerts)
+router.get('/farming-notifications', getFarmingNotifications);
 
-export default router
+export default router;

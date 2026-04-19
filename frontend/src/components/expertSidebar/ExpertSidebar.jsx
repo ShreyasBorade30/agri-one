@@ -7,7 +7,7 @@ import ProfileIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutIcon from "@mui/icons-material/ExitToAppOutlined";
 import "./ExpertSidebar.scss";
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../../assets/logo.png';
+import logo from '../../assets/webLogo.png';
 import newRequest from "../../utils/newRequest";
 
 const ExpertSidebar = ({ setUserRole }) => {
@@ -17,7 +17,10 @@ const ExpertSidebar = ({ setUserRole }) => {
     try {
       await newRequest.post("/api/auth/signout");
       localStorage.removeItem("userRole");
-      setUserRole(null);
+      localStorage.removeItem("token");
+      if (typeof setUserRole === "function") {
+        setUserRole(null);
+      }
       navigate('/');
     } catch (err) {
       console.error("Error logging out", err);
@@ -27,9 +30,9 @@ const ExpertSidebar = ({ setUserRole }) => {
   return (
     <div className="sidebar">
       <div className="top">
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <img src={logo} width={30} height={30} alt="" />
-          <span className="logo">AgriConnect</span>
+        <Link to="/" style={{ textDecoration: "none", display: "flex", flexDirection: "row", alignItems: "center", gap: "15px" }}>
+          <img src={logo} width={80} height={80} alt="" />
+          <span className="logo">Agri-One</span>
         </Link>
       </div>
       <hr />
@@ -51,6 +54,12 @@ const ExpertSidebar = ({ setUserRole }) => {
             <div className="card">
               <RequestIcon className="icon" />
               <span>Appointment Requests</span>
+            </div>
+          </Link>
+          <Link to="/appointment_history" style={{ textDecoration: "none" }}>
+            <div className="card">
+              <HistoryIcon className="icon" />
+              <span>Appointment History</span>
             </div>
           </Link>
         </div>

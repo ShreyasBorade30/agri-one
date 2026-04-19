@@ -4,33 +4,64 @@
     --dark-green: #1b4332;
     --background-gray: #f7f8f8;
     --text-dark: #344e41;
+    --sidebar-bg: #2d6a4f;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-text: white;
+    --card-hover-bg: white;
+    --card-hover-text: #2d6a4f;
+  }
+
+  [data-theme='dark'] {
+    --sidebar-bg: #1b4332;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-text: #95d5b2;
+    --card-hover-bg: #95d5b2;
+    --card-hover-text: #1b4332;
   }
   
   .sidebar {
     width: 25vw;
     height: 100vh;
-    background-color: var(--primary-green);
-    color: var(--text-dark);
+    background-color: var(--sidebar-bg);
+    color: var(--card-text);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    
+    transition: all 0.3s ease;
+    border-right: 1px solid var(--border);
+
     .top {
       width: 100%;
       text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: row; 
+      align-items: center;
+      justify-content: center;
+      gap: 15px; // Gap between logo and name
+
       .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: var(--background-gray);
+        font-family: 'Fraunces', serif;
+        font-size: 1.8rem; 
+        font-weight: 700;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      img {
+        width: 80px; 
+        height: 80px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 10px rgba(109, 191, 71, 0.3));
       }
     }
-  
+
     hr {
       width: 100%;
       border: none;
-      border-top: 1px solid var(--light-green);
-      margin: 10px 0;
+      border-top: 1px solid var(--border);
+      margin: 10px 0 20px 0;
     }
   
     .bottom {
@@ -39,76 +70,95 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 15px; // Same gap for all elements
+      background-color: var(--sidebar-bg); 
     }
   
     .card-container {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
       width: 100%;
+      background-color: var(--sidebar-bg);
     }
   
     .card {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background-color: var(--light-green);
-      color: var(--text-dark);
-      padding: 15px;
-      border-radius: 10px;
+      justify-content: flex-start;
+      background-color: var(--card-bg);
+      color: var(--card-text);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.2s ease;
       
       &:hover {
-        background-color: var(--primary-green);
-        color: white;
+        background-color: var(--green-dim);
+        color: var(--green);
+        border-color: var(--green);
+        transform: translateX(5px);
+        .icon {
+          color: var(--green);
+        }
       }
   
       .icon {
-        font-size: 1.8rem;
-        margin-right: 10px;
-        color: var(--dark-green);
+        font-size: 1.4rem;
+        margin-right: 15px;
+        color: var(--text2);
       }
   
       span {
-        font-size: 1rem;
-        font-weight: 500;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: 'Nunito', sans-serif;
       }
     }
   
     .profile-actions {
-      margin-top: auto;
+      margin-top: 0; 
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px; 
       width: 100%;
+      padding-bottom: 20px;
+      background-color: var(--sidebar-bg);
     }
   
     .action {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 10px;
-      background-color: var(--light-green);
-      color: var(--text-dark);
-      border-radius: 10px;
+      justify-content: flex-start;
+      padding: 12px 18px;
+      background-color: var(--card-bg);
+      color: var(--card-text);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.2s ease;
   
       &:hover {
-        background-color: var(--primary-green);
-        color: white;
+        background-color: var(--green-dim);
+        color: var(--green);
+        border-color: var(--green);
+        transform: translateX(5px);
+        .icon {
+          color: var(--green);
+        }
       }
   
       .icon {
-        font-size: 1.5rem;
-        margin-right: 10px;
-        color: var(--dark-green);
+        font-size: 1.4rem;
+        margin-right: 15px;
+        color: var(--text2);
       }
   
       span {
-        font-size: 1rem;
-        font-weight: 500;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: 'Nunito', sans-serif;
       }
     }
   }

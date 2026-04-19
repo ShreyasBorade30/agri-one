@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import newRequest from '../../utils/newRequest.js';
 import './BlogDetailsFarmer.scss';
 
 const BlogDetailsFarmer = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [post, setPost] = useState(null);
 
     useEffect(() => {
@@ -20,10 +19,6 @@ const BlogDetailsFarmer = () => {
         fetchPost();
     }, [id]);
 
-    const handleBackToHome = () => {
-        navigate('/');
-    };
-
     return (
         <div className='blogDetails'>
             {post ? (
@@ -34,9 +29,6 @@ const BlogDetailsFarmer = () => {
             ) : (
                 <p>Loading post details...</p>
             )}
-            <button className="backButton" onClick={handleBackToHome}>
-                Back to Home
-            </button>
         </div>
     );
 };

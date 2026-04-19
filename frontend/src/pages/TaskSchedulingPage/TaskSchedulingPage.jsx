@@ -5,22 +5,17 @@ import Navbar from '../../components/navbar/Navbar'
 // import './WeatherReport.scss'
 import './TaskSchedulingPage.scss'
 import TaskSchedular from '../../components/taskSchedular/TaskSchedular.jsx'
-import BackToHome from '../../components/backToHome/BackToHome.jsx'
 
-const TaskSchedulingPage = () => {
+const TaskSchedulingPage = ({ setUserRole }) => {
   return (
     <div className='taskScheduling-container'>
-        <div className="left">
-            <Sidebar/>
+      <Sidebar setUserRole={setUserRole} />
+      <div className="right">
+        <Navbar />
+        <div className="bottom">
+          <TaskSchedular />
         </div>
-        <div className="right">
-            <div className="top">
-                <BackToHome/>
-            </div>
-            <div className="bottom">
-                <TaskSchedular/>
-            </div>
-        </div>
+      </div>
     </div>
   )
 }

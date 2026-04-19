@@ -8,6 +8,9 @@ export default function initAppointmentSocket(io) {
         // Event when user sets their socketId
         socket.on('setUser', async (userId) => {
             try {
+                // Join a room named after the userId for targeted notifications
+                socket.join(userId.toString());
+                
                 const user = await User.findById(userId);
 
                 if (!user) {

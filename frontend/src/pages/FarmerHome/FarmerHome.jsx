@@ -6,11 +6,14 @@ import "./FarmerHome.scss";
 import support from '../../assets/sustainable.png';
 import RevenueChart from "../../components/chart/Chart.jsx";
 import TaskCompletionChart from '../../components/taskCompletion/TaskCompletion.jsx';
-import FarmingNews from "../../components/farmingNews/FarmingNews.jsx";
+import FarmingNews from '../../components/farmingNews/FarmingNews';
 import GrowthProgressTracker from "../../components/growthProgressTracker/GrowthProgressTracker.jsx";
 import WaterUsageGraph from "../../components/WaterUsageComponent/WaterUsageComponent.jsx";
 import newRequest from "../../utils/newRequest.js";
 import { useNavigate } from "react-router-dom";
+import Chatbot from '../../components/Chatbot/Chatbot';
+
+import socket from "../../utils/socket.js";
 
 const Home = ({ setUserRole }) => {
   const [appointments, setAppointments] = useState([]);
@@ -26,42 +29,53 @@ const Home = ({ setUserRole }) => {
     navigate(`/posts/${postId}`);
   }
 
+  const handleJoinCall = (appointmentId) => {
+    socket.emit('join-call', { appointmentId, role: 'farmer' });
+    navigate(`/video-call/${appointmentId}`);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch notifications from the backend
+      // 1. Fetch DYNAMIC notifications based on User's Region (using default Kolkata for now)
       try {
-        const notificationsResponse = await newRequest.get("/api/farming-notifications?region=Kolkata"); 
-        setNotifications(notificationsResponse.data || { alerts: "" });
+        const notificationsResponse = await newRequest.get("/api/news?region=Kolkata"); 
+        // Using AI generated alerts from our updated controller
+        setNotifications(notificationsResponse.data || { alerts: "Stay updated with local farming alerts." });
       } catch (error) {
         console.error("Error fetching notifications:", error);
-        setNotifications({ alerts: "" }); 
+        setNotifications({ alerts: "Monitor local weather for crop health." }); 
       }
 
-      // Fetch appointments from backend
-      setAppointments([
-        { id: 1, date: "2024-11-05", expertName: "Dr. Ravi Patel" },
-        { id: 2, date: "2024-11-12", expertName: "Dr. Anjali Sharma" },
-      ]);
-
-      // Fetch crop data
+      // 2. Fetch REAL appointments from database
       try {
-        const cropResponse = await newRequest.get("/api/crops");
-        setCrops(cropResponse.data || []); 
+        const appointmentsResponse = await newRequest.get("/api/appointments/farmer");
+        // Only show upcoming (accepted) appointments on dashboard
+        const upcoming = (appointmentsResponse.data || []).filter(app => app.status === 'accepted');
+        setAppointments(upcoming);
       } catch (error) {
-        console.error("Error fetching crops data:", error);
-        setCrops([]); 
+        console.error("Error fetching appointments:", error);
       }
 
-      // Fetch blog posts from the backend
+      // 3. Fetch LATEST blog posts from experts
       try{
         const blogResponse = await newRequest.get('/api/posts/getPost');
         setBlogPosts(blogResponse.data || []);
       }catch(err){
         console.error("Error fetching blog posts", err);
-        setBlogPosts([]);
       }
     };
     fetchData();
+
+    // Socket listeners for real-time updates
+    socket.on('appointmentAccepted', (data) => {
+      setAppointments((prev) => 
+        prev.map(app => app._id === data.appointmentId ? { ...app, status: 'accepted' } : app)
+      );
+    });
+
+    return () => {
+      socket.off('appointmentAccepted');
+    };
   }, []);
 
   // const blogPosts = [
@@ -129,11 +143,23 @@ const Home = ({ setUserRole }) => {
           <section className="appointments1">
             <h2>Upcoming Appointments</h2>
             <ul>
-              {appointments.map((appointment) => (
-                <li key={appointment.id}>
-                  {appointment.date} - {appointment.expertName}
-                </li>
-              ))}
+              {appointments.length > 0 ? (
+                appointments.map((appointment) => (
+                  <li key={appointment._id}>
+                    <div className="appointment-details">
+                      <span>{new Date(appointment.date).toLocaleDateString()} - {appointment.expertId?.name || 'Expert'}</span>
+                      <span className={`status ${appointment.status}`}>{appointment.status}</span>
+                    </div>
+                    {appointment.status === 'accepted' && (
+                      <button className="join-call-btn" onClick={() => handleJoinCall(appointment._id)}>
+                        Join Video Call
+                      </button>
+                    )}
+                  </li>
+                ))
+              ) : (
+                <li>No appointments found.</li>
+              )}
             </ul>
           </section>
         </div>
@@ -161,11 +187,12 @@ const Home = ({ setUserRole }) => {
           ))}
         </div>
 
-        <div className="news">
+        {/* <div className="news">
           <FarmingNews/>
-        </div>
+        </div> */}
         
       </div>
+      <Chatbot />
     </div>
   );
 };

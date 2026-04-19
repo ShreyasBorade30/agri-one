@@ -21,10 +21,16 @@ try {
     // Create new user
     const newUser = await User.create({ name, email, password: hashedPassword, role });
 
+    // Ensure JWT_SECRET is available
+    if (!process.env.JWT_SECRET) {
+        console.error("JWT_SECRET is not defined in environment variables");
+        return res.status(500).json({ message: "Server configuration error" });
+    }
+
     // Generate JWT token
     const token = jwt.sign(
         { id: newUser._id, role: newUser.role },
-        process.env.JWT_KEY,
+        process.env.JWT_SECRET,
         { expiresIn: "10h" }
     );
 
@@ -32,7 +38,7 @@ try {
     return res
         .cookie('token', token, {secure: true, sameSite: 'None'})  // Setting cookie
         .status(201)
-        .json({ message: "User created successfully", token, role: newUser.role });
+        .json({ message: "User created successfully", token, role: newUser.role, id: newUser._id });
 } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Something went wrong" });
@@ -55,7 +61,7 @@ try {
     // Generate JWT token
     const token = jwt.sign(
         { id: user._id, role: user.role },
-        process.env.JWT_KEY,
+        process.env.JWT_SECRET,
         { expiresIn: "10h" }
     );
 
@@ -64,7 +70,7 @@ try {
         return res
             .cookie('token', token, {secure: true, sameSite: 'None'})  // Setting cookie})
             .status(200)
-            .json({ message: "Logged in successfully", token, role: user.role });
+            .json({ message: "Logged in successfully", token, role: user.role, id: user._id });
     }
 } catch (err) {
     console.error(err);

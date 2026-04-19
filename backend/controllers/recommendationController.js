@@ -1,76 +1,89 @@
-import axios from 'axios';
-import dotenv from 'dotenv';
+import Groq from "groq-sdk";
+import Recommendation from "../models/recommendationModel.js";
 
-export const getRecommendations = async (req, res) => {
-    dotenv.config();
-    
-    // Destructure the required fields from req.body
-    const { climate, soilType, cropType, cropInfo, weatherDetails, cropConditions } = req.body;
+// SIMULATED IoT SENSOR DATA (Integration Logic)
+export const getIotSensorData = async (req, res) => {
+    // In real scenario, this would fetch from an IoT Cloud (AWS/Azure)
+    const mockData = {
+        moisture: Math.floor(Math.random() * (80 - 20) + 20) + "%",
+        soilPH: (Math.random() * (8.5 - 5.5) + 5.5).toFixed(1),
+        nitrogen: Math.floor(Math.random() * 100) + " mg/kg",
+        temperature: Math.floor(Math.random() * (40 - 15) + 15) + "°C"
+    };
+    res.status(200).json(mockData);
+};
+
+export const aiChatbot = async (req, res) => {
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const { message } = req.body;
+    const userId = req.userId;
 
     try {
-        // Construct a detailed prompt for the API based on the farmer's inputs
-        const promptText = `
-            Please provide farming recommendations based on the following information:
+        // Fetch User's farming history for context
+        const userHistory = await Recommendation.find({ userId }).sort({ createdAt: -1 }).limit(3);
+        const context = userHistory.map(h => `Crop: ${h.cropType}, Soil: ${h.soilType}`).join(" | ");
 
-            1. **Climate**: ${climate}
-            2. **Soil Type**: ${soilType}
-            3. **Crop Type**: ${cropType}
-            4. **Information about the Crop**: ${cropInfo}
-            5. **Today's Weather**: ${weatherDetails}
-            6. **Crop Conditions**: ${cropConditions}
+        const promptText = `You are an AI Agriculture Expert. 
+        User Context (Past crops): ${context || "New User"}
+        Question: ${message}
+        Provide a concise, helpful answer in farming terms.`;
 
-            Based on this information, please suggest:
-            - Suitable farming practices for today.
-            - Care tips for the specified crop considering the current weather and soil conditions.
-            - Any precautions to take given today's weather and crop requirements.
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [{ role: "user", content: promptText }],
+            model: "llama-3.3-70b-versatile",
+        });
 
-            Make the recommendations clear and easy to understand for farmers. Thank you!
-        `;
-
-        const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-            {
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: promptText.trim(), // Trim whitespace from the prompt text
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-
-        // Log the entire response for debugging
-        console.log(response.data.candidates);
-
-        // Check if response contains candidates
-        if (response.data.candidates && response.data.candidates.length > 0) {
-            // Log the structure of the content object to understand its properties
-            console.log(JSON.stringify(response.data.candidates[0].content, null, 2));
-
-            // Extract the recommendation text from the parts array
-            const parts = response.data.candidates[0].content.parts; // Access the parts array
-
-            if (parts && parts.length > 0) {
-                const recommendation = parts[0].text; // Get the text from the first part
-                res.status(200).json({ recommendation });
-            } else {
-                console.error("No parts found in the content.");
-                res.status(404).json({ error: "No recommendations found" });
-            }
-        } else {
-            console.error("No candidates found in the response.");
-            res.status(404).json({ error: "No recommendations found" });
-        }
+        res.status(200).json({ reply: chatCompletion.choices[0]?.message?.content });
     } catch (err) {
-        console.error("Error fetching recommendations: ", err);
+        res.status(500).json({ error: "Chatbot unavailable" });
+    }
+};
+
+export const getRecommendations = async (req, res) => {
+    try {
+        const apiKey = process.env.GROQ_API_KEY;
+        const userId = req.userId; // From verifyToken middleware
+
+        if (!apiKey) {
+            console.error("GROQ_API_KEY is missing in backend .env");
+            return res.status(500).json({ error: "GROQ_API_KEY is missing" });
+        }
+        
+        const groq = new Groq({ apiKey });
+        
+        const { climate, soilType, cropType, cropInfo, weatherDetails, cropConditions } = req.body;
+        
+        const promptText = `You are a Senior Agricultural Scientist. A farmer provides:
+        - Crop: ${cropType}, Climate: ${climate}, Soil: ${soilType}, Weather: ${weatherDetails}
+        TASK: Validate if suitable. If not, give WARNING and alternatives. If yes, give tips. Bullet points only.`;
+
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [{ role: "user", content: promptText }],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.2,
+        });
+
+        const recommendations = chatCompletion.choices[0]?.message?.content || "No recommendations found.";
+        
+        // Save to Database
+        await Recommendation.create({
+            userId, climate, soilType, cropType, cropInfo, weatherDetails, cropConditions, recommendations
+        });
+
+        res.status(200).json({ recommendations });
+
+    } catch (err) {
+        console.error("Error:", err.message);
         res.status(500).json({ error: "Failed to fetch recommendations" });
+    }
+};
+
+export const getRecommendationHistory = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const history = await Recommendation.find({ userId }).sort({ createdAt: -1 });
+        res.status(200).json(history);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch history" });
     }
 };

@@ -1,0 +1,139 @@
+.chatbot-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  .chatbot-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #1b4332;
+      transform: scale(1.05);
+    }
+  }
+
+  .chatbot-window {
+    width: 350px;
+    height: 450px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+
+    .chatbot-header {
+      background: #2d6a4f;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: bold;
+      }
+
+      .close-icon {
+        cursor: pointer;
+        font-size: 20px;
+        &:hover { opacity: 0.8; }
+      }
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f9f9f9;
+
+      .message {
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        font-size: 14px;
+        line-height: 1.4;
+
+        &.bot {
+          align-self: flex-start;
+          background: #e9ecef;
+          color: #212529;
+          border-bottom-left-radius: 2px;
+        }
+
+        &.user {
+          align-self: flex-end;
+          background: #2d6a4f;
+          color: white;
+          border-bottom-right-radius: 2px;
+        }
+
+        &.typing {
+          font-style: italic;
+          opacity: 0.7;
+        }
+      }
+    }
+
+    .chatbot-input {
+      padding: 15px;
+      background: white;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #eee;
+
+      input {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        padding: 8px 15px;
+        outline: none;
+        font-size: 14px;
+        &:focus { border-color: #2d6a4f; }
+      }
+
+      button {
+        background: #2d6a4f;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:disabled { opacity: 0.5; cursor: not-allowed; }
+        &:hover:not(:disabled) { background: #1b4332; }
+
+        svg { font-size: 20px; }
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

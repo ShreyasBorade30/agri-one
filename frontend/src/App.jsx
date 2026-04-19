@@ -23,6 +23,10 @@ import ExpertAppointments from './pages/ExpertAppointment/ExpertAppointment.jsx'
 import VideoCallPage from './pages/videoCallPage/VideoCallPage.jsx';
 import VideoCallRoom from './pages/videoCallPage/VideoCallPage.jsx';
 import AddFarmerProfile from './components/addProfile/AddProfile.jsx';
+import AppointmentHistory from './pages/ExpertAppointmentHistory/AppointmentHistory.jsx';
+import LabourDirectory from './pages/LabourDirectory/LabourDirectory.jsx';
+import AdvancedFeatures from './pages/AdvancedFeatures/AdvancedFeatures.jsx';
+import Marketplace from './pages/Marketplace/Marketplace.jsx';
 
 function App() {
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole") || null);
@@ -66,50 +70,50 @@ function App() {
     },
     {
       path: '/weather_report',
-      element: <WeatherReport />
+      element: <WeatherReport setUserRole={setUserRole} />
     },
     {
       path: '/farming_recommendations',
-      element: <Recommendations />
+      element: <Recommendations setUserRole={setUserRole} />
     },
     {
       path: '/task_scheduling',
-      element: <TaskSchedulingPage />
+      element: <TaskSchedulingPage setUserRole={setUserRole} />
     },
     {
       path: '/revenue_record',
-      element: <RevenueRecord />
+      element: <RevenueRecord setUserRole={setUserRole} />
     },
     {
       path: '/crop_details_management',
-      element: <CropDetailsPage />
+      element: <CropDetailsPage setUserRole={setUserRole} />
     },
     {
       path: '/profile',
-      element: <ProfilePage/>
+      element: <ProfilePage setUserRole={setUserRole} />
     },
     {
       path: '/appointments',
-      element: <AppointmentPage/>
+      element: <AppointmentPage setUserRole={setUserRole} />
     },
     {
       path: '/expert/:id',
-      element: <ExpertDetails/>
+      element: <ExpertDetails />
     },
     {
       path: '/expert-profile',
-      element:<ExpertProfilePage/>
+      element: <ExpertProfilePage setUserRole={setUserRole} />
     },
     {
       path:'/createPost',
-      element: <CreateNewPostExpertPage/>
+      element: <CreateNewPostExpertPage setUserRole={setUserRole} />
     },{
       path: '/viewMyBlogs',
-      element: <ViewBlogPage/>
+      element: <ViewBlogPage setUserRole={setUserRole} />
     },
     {
       path: '/blog/:id',
-      element: <BlogDetailsExpertPage/>
+      element: <BlogDetailsExpertPage setUserRole={setUserRole} />
     },
     {
       path: '/posts/:id',
@@ -134,6 +138,22 @@ function App() {
     {
       path: "/add-profile",
       element: <AddFarmerProfile/>
+    },
+    {
+      path: "/appointment_history",
+      element: <AppointmentHistory setUserRole={setUserRole} />
+    },
+    {
+      path: "/labour_directory",
+      element: <LabourDirectory setUserRole={setUserRole} />
+    },
+    {
+      path: "/advanced_features",
+      element: <AdvancedFeatures setUserRole={setUserRole} />
+    },
+    {
+      path: "/marketplace",
+      element: <Marketplace setUserRole={setUserRole} />
     }
   ]);
 

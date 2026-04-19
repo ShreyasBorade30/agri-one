@@ -1,6 +1,9 @@
 .performance {
     padding: 20px;
     font-family: 'Arial', sans-serif;
+    background-color: var(--body-bg);
+    color: var(--body-text);
+    transition: all 0.3s ease;
   
     h2 {
       text-align: center;

@@ -1,65 +1,37 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import Groq from "groq-sdk";
 
 export const getBlogRecommendations = async (req, res) => {
     dotenv.config();
-
+    if (!process.env.GROQ_API_KEY) {
+        return res.status(500).json({ error: "GROQ_API_KEY is missing" });
+    }
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     // Retrieve parameters from the query string
     const { region } = req.query;
 
     try {
-        // Construct a prompt to generate the "Tip of the Day" and recent farming challenges
-        const promptText = `
-            please provide the following for the experts with new recommendations every time :
-            
-             Suggest 2 topics in 5-6 words that an expert can write about to help farmers address current issues effectively .
-            
-            
+        // Construct a prompt to generate topics for experts
+        const promptText = `Suggest 2 short and recent farming blog topics (max 6 words each) for an expert to write about, addressing current issues like weather or crop health in ${region || 'India'}. Return ONLY the topics, separated by a newline.`;
 
-            Keep each point clear, expert-friendly, and  should be about the most the current weather problems, crop health problems , or economic conditions of the farmers or any recent concerns .
-        `;
-
-        const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-            {
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: promptText.trim(),
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: promptText,
                 },
-            }
-        );
+            ],
+            model: "llama-3.3-70b-versatile",
+        });
 
-        // Log the response for debugging
-        console.log(response.data.candidates);
+        const recommendations = chatCompletion.choices[0]?.message?.content || "No topics suggested at this time.";
+        
+        console.log("Groq Response:", recommendations);
+        res.status(200).json({ recommendations });
 
-        // Check if response contains candidates
-        if (response.data.candidates && response.data.candidates.length > 0) {
-            const parts = response.data.candidates[0].content.parts;
-
-            if (parts && parts.length > 0) {
-                // Extract the structured content from the response
-                const recommendations = parts[0].text;
-                res.status(200).json({ recommendations });
-            } else {
-                console.error("No parts found in the content.");
-                res.status(404).json({ error: "No recommendations found" });
-            }
-        } else {
-            console.error("No candidates found in the response.");
-            res.status(404).json({ error: "No recommendations found" });
-        }
     } catch (err) {
-        console.error("Error fetching expert recommendations: ", err);
-        res.status(500).json({ error: "Failed to fetch recommendations" });
+        console.error("Error fetching expert recommendations from Groq: ", err.message);
+        res.status(200).json({ recommendations: "1. Smart Irrigation Techniques\n2. Pest Control Management" });
     }
 };

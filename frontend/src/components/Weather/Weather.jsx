@@ -1,47 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import './Weather.scss';
 
+import newRequest from '../../utils/newRequest.js';
+
 const Weather = () => {
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
-    const [searchCity, setSearchCity] = useState('Kolkata');
-
-    const API_KEY = import.meta.env.VITE_API_KEY;
+    const [searchCity, setSearchCity] = useState('');
 
     useEffect(() => {
         const fetchWeatherData = async () => {
+            if (!searchCity) return; // Don't fetch if searchCity is empty
             try {
-                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=${API_KEY}&units=metric`);
-                const data = await response.json();
-                if (response.ok) {
-                    setWeather({
-                        description: data.weather[0].description,
-                        temp: data.main.temp,
-                        humidity: data.main.humidity,
-                        windSpeed: data.wind.speed,
-                        pressure: data.main.pressure,
-                        visibility: data.visibility / 1000, // Convert to km
-                        cloudiness: data.clouds.all,
-                        sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(),
-                        sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString(),
-                        feels_like: data.main.feels_like,
-                        windDirection: data.wind.deg,
-                        weatherIcon: data.weather[0].icon
-                    });
-                } else {
-                    setWeather(null);
-                    console.log('City not found');
-                }
+                const response = await newRequest.get(`/api/weather?city=${searchCity}`);
+                const data = response.data;
+                
+                setWeather({
+                    description: data.weather[0].description,
+                    temp: data.main.temp,
+                    humidity: data.main.humidity,
+                    windSpeed: data.wind.speed,
+                    pressure: data.main.pressure,
+                    visibility: data.visibility / 1000, // Convert to km
+                    cloudiness: data.clouds.all,
+                    sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(),
+                    sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString(),
+                    feels_like: data.main.feels_like,
+                    windDirection: data.wind.deg,
+                    weatherIcon: data.weather[0].icon
+                });
             } catch (err) {
-                console.log('Error fetching weather data: ', err);
+                console.error('Error fetching weather data: ', err);
+                setWeather(null);
             }
         };
 
         fetchWeatherData();
-    }, [searchCity, API_KEY]);
+    }, [searchCity]);
 
     const handleCityChange = (e) => setCity(e.target.value);
-    const handleSearch = () => city && setSearchCity(city);
+    const handleSearch = () => {
+        if (city.trim()) {
+            setSearchCity(city.trim());
+        }
+    };
 
     return (
         <div className="weather-home">
@@ -68,7 +70,7 @@ const Weather = () => {
                         <p>The sun will rise at {weather.sunrise} and set at {weather.sunset}. Plan your day accordingly.</p>
                     </div>
                 ) : (
-                    <p>Loading... Please enter your city name to see the weather report.</p>
+                    searchCity && <p>Loading weather data for {searchCity}...</p>
                 )}
             </div>
         </div>

@@ -15,21 +15,30 @@ const Authentication = ({ setUserRole }) => {
 
   useEffect(() => {
     const checkToken = async () => {
+      const token = localStorage.getItem("token");
+      
+      // जर टोकन नसेल, तर काहीही न करता रिटर्न व्हा (नो एरर)
+      if (!token || token === "undefined") {
+        console.log("No token found, staying on auth page.");
+        return;
+      }
+
       try {
-        const response = await newRequest.get('/api/auth/validate-token', { 
-          withCredentials: true 
-        });
+        const response = await newRequest.get('/api/auth/validate-token');
         if (response.data && response.data.role) {
-          toast.success(response.data.message)
+          if (response.data.userId) {
+            localStorage.setItem("userId", response.data.userId);
+          }
           setUserRole(response.data.role);
           navigate(response.data.role === 'farmer' ? '/farmer_home' : '/expert_home');
         }
       } catch (error) {
-        console.log("No valid token found, proceed to login/signup");
+        console.log("Session invalid, clearing token.");
+        localStorage.removeItem("token");
       }
     };
     checkToken();
-  }, [setUserRole]);
+  }, [setUserRole, navigate]);
 
   const handleRegisterClick = () => {
     containerRef.current.classList.add('active');
@@ -52,9 +61,16 @@ const Authentication = ({ setUserRole }) => {
         password,
         role,
       },{withCredentials: true})
+      // Save token to localStorage
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      if (response.data.id || response.data.userId) {
+        localStorage.setItem("userId", response.data.id || response.data.userId);
+      }
       toast.success(response.data.message)
       setUserRole(role)
-      navigate(role === 'farmer'? '/farmer_home': 'expert_home')
+      navigate(role === 'farmer'? '/farmer_home': '/expert_home')
 
     }catch(error){
       toast.error(error.response?.data?.message || 'Signup failed' )
@@ -69,9 +85,16 @@ const Authentication = ({ setUserRole }) => {
         password,
         role,
       },{withCredentials: true})
+      // Save token to localStorage
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      if (response.data.id || response.data.userId) {
+        localStorage.setItem("userId", response.data.id || response.data.userId);
+      }
       toast.success(response.data.message)
       setUserRole(role)
-      navigate(role === 'farmer'? '/farmer_home': 'expert_home')
+      navigate(role === 'farmer'? '/farmer_home': '/expert_home')
 
 
     }catch(error){

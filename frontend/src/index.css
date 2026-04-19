@@ -1,68 +1,57 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+:root {
+  /* Agri-One (Btech_proj) Theme */
+  --bg:        #0f1a0e;
+  --bg2:       #162014;
+  --surface:   #1d2b1a;
+  --surface2:  #243221;
+  --border:    rgba(120,200,80,0.12);
+  --border2:   rgba(120,200,80,0.22);
+  --green:     #6dbf47;
+  --green2:    #4a9e2a;
+  --green-dim: rgba(109,191,71,0.15);
+  --amber:     #f0b429;
+  --amber-dim: rgba(240,180,41,0.15);
+  --red:       #e05252;
+  --red-dim:   rgba(224,82,82,0.12);
+  --blue:      #5ab0e0;
+  --blue-dim:  rgba(90,176,224,0.12);
+  --text:      #e8f0e4;
+  --text2:     #8fa887;
+  --text3:     #5a7052;
+  --radius:    18px;
+  --radius-sm: 10px;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Legacy compatibility */
+  --primary-green: var(--green2);
+  --light-green: var(--green);
+  --dark-green: var(--bg);
+  --background-gray: var(--bg2);
+  --text-dark: var(--text3);
+  --body-bg: var(--bg);
+  --body-text: var(--text);
+  --card-bg: var(--surface);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Sidebar Theme Integration */
+  --sidebar-bg: var(--bg);
+  --card-bg: var(--surface);
+  --card-text: var(--text);
+  --card-hover-bg: var(--green2);
+  --card-hover-text: white;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+[data-theme='dark'] {
+  /* Dark mode stays consistent with the primary dark aesthetic */
+  --body-bg: #0a1209;
+  --bg: #0a1209;
+  --surface: #121d11;
+  --sidebar-bg: #0a1209;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  background-color: var(--body-bg);
+  color: var(--body-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Nunito', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */

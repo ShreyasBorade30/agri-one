@@ -1,23 +1,17 @@
 import React from 'react'
 import Sidebar from '../../components/sidebar/Sidebar.jsx'
-import BackToHome from '../../components/backToHome/BackToHome.jsx'
 import Appointments from '../../components/bookAppointments/Appointments.jsx'
 import './AppointmentPage.scss'
 
-const AppointmentPage = () => {
+const AppointmentPage = ({ setUserRole }) => {
   return (
     <div className='appointment-container'>
-        <div className="left">
-            <Sidebar/>
+      <Sidebar setUserRole={setUserRole} />
+      <div className="right">
+        <div className="bottom">
+          <Appointments />
         </div>
-        <div className="right">
-            <div className="top">
-                <BackToHome/>
-            </div>
-            <div className="bottom">
-                <Appointments/>
-            </div>
-        </div>
+      </div>
     </div>
   )
 }

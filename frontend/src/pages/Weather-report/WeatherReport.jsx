@@ -3,23 +3,16 @@ import Sidebar from '../../components/sidebar/Sidebar.jsx'
 // import Navbar from '../../components/navbar/Navbar'
 import Weather from '../../components/Weather/Weather.jsx'
 import './WeatherReport.scss'
-import BackToHome from '../../components/backToHome/BackToHome.jsx'
 
-const WeatherReport = () => {
+const WeatherReport = ({ setUserRole }) => {
   return (
     <div className='weather-container'>
-        <div className="left">
-            <Sidebar/>
+      <Sidebar setUserRole={setUserRole} />
+      <div className="right">
+        <div className="bottom">
+          <Weather />
         </div>
-        <div className="right">
-            <div className="top">
-              <BackToHome/>
-            </div>
-            <div className="bottom">
-             <Weather/>
-            </div>
-           
-        </div>
+      </div>
     </div>
   )
 }

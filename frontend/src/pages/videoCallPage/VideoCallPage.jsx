@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import './VideoCallPage.scss';
 
+import CallEndIcon from '@mui/icons-material/CallEnd';
+
 const VideoCallRoom = ({ appointmentId, role }) => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
@@ -11,7 +13,7 @@ const VideoCallRoom = ({ appointmentId, role }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io('https://weather-xgyu.onrender.com');
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000');
     setSocket(newSocket);
 
     newSocket.emit('join-call', { appointmentId, role });
@@ -127,6 +129,7 @@ const VideoCallRoom = ({ appointmentId, role }) => {
     }
     setRemoteStream(null);
     socket.emit('disconnect-call', { appointmentId, role });
+    window.close(); // Close tab if possible, or navigate away
   };
 
   useEffect(() => {
@@ -168,7 +171,9 @@ const VideoCallRoom = ({ appointmentId, role }) => {
       <div className="controls">
         <button onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</button>
         <button onClick={toggleVideo}>{isVideoOff ? 'Turn Video On' : 'Turn Video Off'}</button>
-        <button onClick={disconnectCall}>Disconnect</button>
+        <button className="end-call-btn" onClick={disconnectCall}>
+          <CallEndIcon /> End Call
+        </button>
       </div>
     </div>
   );

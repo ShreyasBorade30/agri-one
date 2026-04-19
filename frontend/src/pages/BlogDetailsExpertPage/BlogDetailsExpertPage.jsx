@@ -2,19 +2,15 @@ import React from 'react'
 import ExpertSidebar from '../../components/expertSidebar/ExpertSidebar.jsx'
 import './BlogDetailsExpertPage.scss';
 import BlogDetailExpert from '../../components/blogDetailExpert/BlogDetailExpert.jsx';
-import BackToPosts from '../../components/backToPosts/BackToPosts.jsx';
 
 
-const BlogDetailsExpertPage = () => {
+const BlogDetailsExpertPage = ({ setUserRole }) => {
   return (
     <div className='blog-details-expert-page'>
         <div className="left">
-            <ExpertSidebar/>
+            <ExpertSidebar setUserRole={setUserRole} />
         </div>
         <div className="right">
-            <div className="top">
-                <BackToPosts/>
-            </div>
             <div className="bottom">
                 <BlogDetailExpert/>
             </div>

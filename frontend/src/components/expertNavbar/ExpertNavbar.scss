@@ -3,13 +3,16 @@
 }
 
 .navbar {
-    height: 50px;
+    height: 60px;
     display: flex;
     align-items: center;
     font-size: 14px;
-    color: var(--dark-green); // Use the dark green color for text
-    background-color: whitesmoke;
-    border-bottom: 1px solid lightgray;
+    color: var(--text);
+    background-color: rgba(15, 26, 14, 0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+    padding: 0 20px;
 
     .navbarContainer {
         display: flex;

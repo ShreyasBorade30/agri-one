@@ -1,20 +1,26 @@
 import React from 'react'
 import ExpertProfile from '../../components/expertProfile/ExpertProfile.jsx'
 import './ExpertProfilePage.scss'
-import BackToExpertHome from '../../components/backToExpertHome/BackToExpertHome.jsx'
 import UpdateExpertProfileButton from '../../components/UpdateExpertProfileButton/UpdateExpertProfileButton.jsx'
 
-const ExpertProfilePage = () => {
+import ExpertSidebar from '../../components/expertSidebar/ExpertSidebar.jsx'
+import ExpertNavbar from '../../components/expertNavbar/ExpertNavbar.jsx'
+
+const ExpertProfilePage = ({ setUserRole }) => {
   return (
     <div className='expert-profile-page'>
-       
-        <div className="top">
-            <ExpertProfile/>
+      <ExpertSidebar setUserRole={setUserRole} />
+      <div className="profile-container">
+        <ExpertNavbar />
+        <div className="content">
+          <div className="top">
+            <ExpertProfile />
+          </div>
+          <div className="bottom">
+            <UpdateExpertProfileButton />
+          </div>
         </div>
-        <div className="bottom">
-          <UpdateExpertProfileButton/>
-          <BackToExpertHome/>
-        </div>
+      </div>
     </div>
   )
 }

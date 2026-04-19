@@ -35,21 +35,25 @@ const BlogRecommendation = () => {
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
-  // Extract topics by splitting the recommendations string by each line starting with "**"
+  // Extract topics more reliably
   const recommendationsText = recommendation?.recommendations || "";
+  
+  // Split by newline and filter out empty lines or short lines
   const topics = recommendationsText
     .split("\n")
-    .filter((line) => line.startsWith("**"))
-    .map((topic) => cleanMarkdown(topic));
+    .map(line => line.trim())
+    .filter(line => line.length > 10) // Filter out very short lines/bullets
+    .map(topic => cleanMarkdown(topic));
 
   return (
     <div className="recommendation-box">
-      <h2>Topics of the Day to Write Upon </h2>
+      <h2>Topics of the Day to Write Upon</h2>
       <ul>
         {topics.length > 0 ? (
           topics.map((topic, index) => <li key={index}>{topic}</li>)
         ) : (
-          <li>No topics available.</li>
+          // If no lines were filtered, show the whole text cleaned
+          <li>{cleanMarkdown(recommendationsText)}</li>
         )}
       </ul>
     </div>

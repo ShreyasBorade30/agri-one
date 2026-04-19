@@ -1,36 +1,23 @@
-.cropManagement-container{
-    display:flex;
-    gap:20px;
-    width:100vw;
-
-    .left {
-        // width: 250px; // Sidebar width
-        background-color: #2d3748; // Sidebar background color
-        position: fixed; // Fixes the sidebar to the left of the viewport
-        top: 0;
-        left: 0;
-        height: 100vh; // Full height for sidebar
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
+.cropManagement-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg);
+    font-family: 'Nunito', sans-serif;
 
     .right {
-        margin-left: 250px; // Matches the width of the sidebar
-        flex-grow: 1; // Ensures the right section takes the remaining space
-        display: flex;
-        gap:40px;
-        flex-direction: column;
-        width: calc(100% - 250px); // Ensures the right section fills remaining space
+        flex: 6;
+        background-color: var(--bg2);
+        color: var(--text);
         height: 100vh;
-        overflow: auto; // Enables scrolling if content overflows
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        border-left: 1px solid var(--border);
 
-        .bottom{
-            display: flex;
-            flex-direction: column;
-            gap:40px;
+        .bottom {
+            padding: 20px;
         }
-
-
-        
     }
 }

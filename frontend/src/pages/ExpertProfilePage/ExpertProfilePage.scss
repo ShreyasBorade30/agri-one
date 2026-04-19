@@ -1,23 +1,23 @@
 .expert-profile-page {
     display: flex;
-    flex-direction: column;
-    // margin-top: 100px;
-    // gap:40px;
-    width: 100%;  // Ensure it takes the full width of the page
-    min-height: 100vh;  // To ensure it takes up full height of the viewport
-  
-  
-    .top {
-        
-    //   flex-grow: 1;  // Ensures the bottom div takes the remaining space
-      width: 100%;
-      // margin-top: 25rem;
-      padding: 20px;
-      display: flex;
-      justify-content: center;  // Center the content horizontally
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg);
+    font-family: 'Nunito', sans-serif;
+
+    .profile-container {
+        flex: 6;
+        height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg2);
+        color: var(--text);
+        transition: all 0.3s ease;
+        border-left: 1px solid var(--border);
+
+        .content {
+            padding: 30px;
+        }
     }
-    .bottom{
-      padding: 1rem;
-    }
-  }
-  
+}

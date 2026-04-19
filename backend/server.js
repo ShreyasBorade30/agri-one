@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import authRoute from './routes/authRoute.js';
@@ -18,14 +20,25 @@ import farmerDetailsRoutes from './routes/farmerDetailsRoute.js';
 import postRoutes from './routes/postRoutes.js';
 import getExpertsRoutes from './routes/getExpertsRoute.js';
 import { Server } from 'socket.io';
-import socketManager from './socket/socketManager.js'; // Import socket manager
+import socketManager from './socket/socketManager.js'; 
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import http from 'http';
 import videoCallRoutes from './routes/videoCallRoutes.js';
+import weatherRoutes from './routes/weatherRoutes.js';
+import labourRoutes from './routes/labourRoutes.js';
+import advancedRoutes from './routes/advancedFeaturesRoute.js';
+import marketplaceRoutes from './routes/marketplaceRoute.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '.env') });
+
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Set up middleware
 app.use(cookieParser());
@@ -53,6 +66,7 @@ socketManager(io);  // Initialize socket functionality for both video calls and 
 
 // Route setup
 app.use('/api/video-call', videoCallRoutes);
+app.use('/api/weather', weatherRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/auth', authRoute);
 app.use('/api/auth', validateTokenRoutes);
@@ -61,7 +75,10 @@ app.use('/api', taskRoute);
 app.use('/api/records', recordRoute);
 app.use('/api/crops', cropRoute);
 app.use('/api/irrigation', irrigationRoute);
+app.use('/api/labours', labourRoutes);
 app.use('/api/news', farmingNewsRoute);
+app.use('/api/advanced', advancedRoutes);
+app.use('/api/market', marketplaceRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', blogRecommendationRoute);
 app.use('/api/expert-details', expertDetailsRoutes);

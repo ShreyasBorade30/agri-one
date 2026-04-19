@@ -1,3 +1,4 @@
+@use "sass:color";
 // TaskSchedular.scss
 
 $primary-color: #4e9f3d;
@@ -50,7 +51,7 @@ $month-name-color: #2a2a2a; // Color for month name and arrows
       transition: color $transition-duration;
 
       &:hover {
-        color: darken($month-name-color, 10%); // Slightly darker on hover
+        color: color.adjust($month-name-color, $lightness: -10%); // Slightly darker on hover
       }
     }
 

@@ -54,16 +54,12 @@ const FarmingNews = () => {
         {newsData.length > 0 ? (
           newsData.map((news, index) => (
             <div key={news.id || index} className="farming-news__card">
-              <h3 className="farming-news__headline">
-                {typeof news.headline === 'object' ? JSON.stringify(news.headline) : news.title}
-              </h3>
+              <a href={news.url} target="_blank" rel="noopener noreferrer" className="farming-news__link">
+                <h3 className="farming-news__headline">{news.title}</h3>
+              </a>
               <div className="farming-news__info">
-                <span className="farming-news__source">
-                  {typeof news.source === 'object' ? JSON.stringify(news.source.name) : news.source.name}
-                </span>
-                <span className="farming-news__date">
-                  {typeof news.date === 'object' ? JSON.stringify(news.date) : news.date}
-                </span>
+                <span className="farming-news__source">{news.source?.name}</span>
+                <span className="farming-news__date">{news.date}</span>
               </div>
             </div>
           ))

@@ -1,4 +1,4 @@
-# AgriConnect: Where Farmers Meet Experts & Technology for a Greener Future! 🌾
+# Agri-One: Where Farmers Meet Experts & Technology for a Greener Future! 🌾
 <img width="1907" height="860" alt="image" src="https://github.com/user-attachments/assets/b72159b4-d82b-4a84-95c6-d7372b13055e" />
 
 <img width="1919" height="863" alt="image" src="https://github.com/user-attachments/assets/d5a50f3b-e49a-4140-8745-78fded260535" />
@@ -6,7 +6,7 @@
 <img width="1903" height="868" alt="image" src="https://github.com/user-attachments/assets/66c912cb-a6e3-42c0-b6c1-088b5f267f5e" />
 
 
-**AgriConnect** is an innovative platform designed to empower farmers by connecting them with agricultural experts and modern technology. Our goal is to make farming smarter, more efficient, and more sustainable. By integrating AI-powered crop recommendations, real-time weather updates, expert consultations, and effective task management, we aim to revolutionize the way farming is done.
+**Agri-One** is an innovative platform designed to empower farmers by connecting them with agricultural experts and modern technology. Our goal is to make farming smarter, more efficient, and more sustainable. By integrating AI-powered crop recommendations, real-time weather updates, expert consultations, and effective task management, we aim to revolutionize the way farming is done.
 
 ## 🚀 Features and Functionalities
 
@@ -17,7 +17,7 @@
 
 ### 2. **The Ultimate Farming Hub** 🌱
    - **What it does:** Stay updated with the latest farming news, expert advice, and tech advancements—all in one place.
-   - **How it works:** AgriConnect aggregates agricultural news, expert articles, and the latest farming trends to keep farmers informed about the world of agriculture.
+   - **How it works:** Agri-One aggregates agricultural news, expert articles, and the latest farming trends to keep farmers informed about the world of agriculture.
    - **Technology Used:** React.js for the frontend, MongoDB for storing articles and news data.
 
 ### 3. **Simplified Task Scheduling & Planning** 📅
@@ -45,7 +45,7 @@
    - **How it works:** Farmers can record their income from crops and sales, track their expenses, and manage finances through a user-friendly dashboard.
    - **Technology Used:** MongoDB for data storage, React.js for frontend display.
 
-## 🛠️ Technologies Used
+## ️ Technologies Used
 
 - **Frontend:**
   - **React.js** – A JavaScript library for building interactive user interfaces.
@@ -64,7 +64,7 @@
 
   ## 🚀 Future Scope
 
-AgriConnect aims to continuously evolve and integrate more features to enhance the farming experience. Here are some of the key areas where we plan to take the app further:
+Agri-One aims to continuously evolve and integrate more features to enhance the farming experience. Here are some of the key areas where we plan to take the app further:
 
 1. **Seamless Video Calls & Real-Time Chat**  
    We aim to enhance the communication experience by integrating a smoother, more efficient video call and real-time chat feature for farmers to interact with experts. This will provide more personalized, live consultations and quick resolutions for any farming-related queries.
@@ -88,7 +88,7 @@ AgriConnect aims to continuously evolve and integrate more features to enhance t
 
 ## 🛠 Challenges We Faced
 
-During the development of AgriConnect, we encountered a few hurdles that required creative problem-solving:
+During the development of **Agri-One**, we encountered a few hurdles that required creative problem-solving:
 
 1. **CORS Issues**  
    We faced multiple challenges with CORS (Cross-Origin Resource Sharing) errors when connecting the frontend to the backend. This required fine-tuning our server configurations to ensure smooth communication between the client and server.
@@ -110,7 +110,7 @@ During the development of AgriConnect, we encountered a few hurdles that require
 
 ---
 
-This is just the beginning for AgriConnect, and we are excited about its future. Each challenge we faced has made the app stronger, and we look forward to implementing these new features and improvements to make farming smarter and more sustainable. 🌱
+This is just the beginning for **Agri-One**, and we are excited about its future. Each challenge we faced has made the app stronger, and we look forward to implementing these new features and improvements to make farming smarter and more sustainable. 🌱
 
   
 
@@ -121,25 +121,42 @@ This is just the beginning for AgriConnect, and we are excited about its future.
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/your-username/agriconnect.git
+   git clone https://github.com/your-username/agri-one.git
    ```
 2. **Install Dependencies:**
 
    Navigate into the project directory and install the required dependencies.
 
    ```bash
-   cd agriconnect
+   cd agri-one
    npm install
    ```
 3.**Set up Environment Variables:**
 
-  Create a .env file in the root directory and add the necessary variables, such as API keys for Gemini AI and OpenWeather, and database credentials for MongoDB.  
+  Create a `.env` file in the `backend/` directory and add the following keys. These are essential for the app's functionality:
 
   ```bash
-   GEMINI_API_KEY=your-api-key
-   OPENWEATHER_API_KEY=your-api-key
-  MONGODB_URI=your-mongodb-uri
+   # AI & Database
+   MONGO_URI=your-mongodb-atlas-uri          # To store all user, crop, and marketplace data.
+   JWT_SECRET=your-secret-key               # For secure user login and session management.
+   GROQ_API_KEY=your-groq-api-key           # Powers the high-speed AI Farming Recommendations & Chatbot.
+   
+   # Payments (Razorpay)
+   RAZORPAY_KEY_ID=your-key-id              # Required to initialize the Razorpay Payment Gateway.
+   RAZORPAY_KEY_SECRET=your-key-secret      # Used on the backend to verify secure payment signatures.
+   
+   # Real-time Data APIs
+   OPENWEATHER_API_KEY=your-api-key         # Fetches live weather to provide dynamic AI alerts.
+   NEWS_API_KEY=your-news-api-key           # Fetches latest agricultural news dynamically.
+   PORT=8000                                # The port where your backend server will run.
  ```
+
+### **Why these keys are required?**
+- **GROQ API:** Used in `recommendationController.js` and `notificationsController.js` to generate scientific farming advice.
+- **RAZORPAY:** Used in `marketplaceController.js` to handle product purchases, equipment rentals, and auction wins.
+- **OPENWEATHER:** Used by the backend to fetch local weather, which the AI then uses to suggest irrigation or pest control.
+- **MONGO_URI:** The central database for everything from user profiles to live auction bids.
+
 4. **Start the Development Server:**
 
   Run the following command to start the backend and frontend servers:
@@ -148,16 +165,16 @@ This is just the beginning for AgriConnect, and we are excited about its future.
   ```
 5.**Access the Application:**
 
- Open your browser and go to http://localhost:5173 to view the AgriConnect app.
+ Open your browser and go to http://localhost:5173 to view the **Agri-One** app.
 
  ## 📺 Video Demo
 
-Watch the demo of AgriConnect in action here:  
-[AgriConnect Demo Video](https://youtu.be/hSKtcfGDbI8)
+Watch the demo of **Agri-One** in action here:  
+[Agri-One Demo Video](https://youtu.be/hSKtcfGDbI8)
 
 ## 🤝 Contributing
 
-We welcome contributions to AgriConnect! If you have ideas to enhance the app or find bugs, feel free to open an issue or submit a pull request.
+We welcome contributions to **Agri-One**! If you have ideas to enhance the app or find bugs, feel free to open an issue or submit a pull request.
 
 ## 📄 License
 
@@ -165,18 +182,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**AgriConnect: Empowering farmers with technology for a greener, smarter future!** 🌱
+**Agri-One: Empowering farmers with technology for a greener, smarter future!** 🌱
 
 
    
 
    
 
-
-## This repo is participating in Hack This Fall 2024 virtual online 36 hr hackathon and  in the following challenges 
-- **Best use of github**
-- **Best use of Gemini APi**
-- **Best use of MongoDb Atlas**
-- **Best first time hackers**
 
 

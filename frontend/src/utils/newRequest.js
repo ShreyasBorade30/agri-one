@@ -1,18 +1,22 @@
 import axios from 'axios';
 
-const token = document.cookie
-  .split('; ')
-  .find((row) => row.startsWith('token='))
-  ?.split('=')[1];
-
 const newRequest = axios.create({
-  // baseURL: "https://weather-xgyu.onrender.com", // this is for the original link dont use this please
-  baseURL: "https://agri-connect-ruwo.onrender.com",
-  // baseURL: "http://localhost:8000",
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-  withCredentials: true,  // This keeps cookies in requests
+  baseURL: "http://localhost:8000",
+  withCredentials: true,
 });
+
+newRequest.interceptors.request.use(
+  (config) => {
+    // Get token from localStorage
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default newRequest;
