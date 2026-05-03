@@ -20,8 +20,21 @@ export const registerLabour = async (req, res) => {
 
 export const getAllLabours = async (req, res) => {
     try {
-        const labours = await Labour.find({ status: 'Available' });
+        const labours = await Labour.find({ 
+            status: 'Available',
+            userId: { $ne: req.userId } // Don't show current user in the directory
+        });
         res.status(200).json(labours);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const getMyLabourProfile = async (req, res) => {
+    try {
+        const labour = await Labour.findOne({ userId: req.userId })
+            .populate('hiredBy', 'name email');
+        res.status(200).json(labour);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

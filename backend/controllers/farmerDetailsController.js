@@ -22,10 +22,10 @@ export const addFarmerDetails = async(req,res)=>{
 
         const user = await User.findById(userId)
         if(!user || user.role!=='farmer'){
-            return res.status(400).json({message:"Invalid expert user ID"})
+            return res.status(400).json({message:"Invalid farmer user ID"})
         }
 
-        const existingDetails = await FarmerDetails.findOne({userId})
+        const existingDetails = await FarmerDetails.findOne({user: userId})
         if(existingDetails){
             return res.status(400).json({message:'Farmer details already exist'})
         }

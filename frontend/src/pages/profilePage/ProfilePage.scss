@@ -1,26 +1,38 @@
 .profile-page {
   display: flex;
   width: 100vw;
-  height: 100vh;
-  background-color: var(--bg);
-  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
 
   .profile-container {
-    flex: 6;
-    height: 100%;
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
     background-color: var(--bg2);
-    color: var(--text);
-    transition: all 0.3s ease;
-    border-left: 1px solid var(--border);
 
     .content {
-      padding: 30px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+
+      .top {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .bottom {
+        padding: 20px;
+        background-color: white;
+        box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
     }
   }
-}
-.profile-page-container{
-    margin-bottom: 20px;
 }

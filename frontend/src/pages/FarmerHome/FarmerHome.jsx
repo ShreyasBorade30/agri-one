@@ -14,8 +14,10 @@ import { useNavigate } from "react-router-dom";
 import Chatbot from '../../components/Chatbot/Chatbot';
 
 import socket from "../../utils/socket.js";
+import { useTranslation } from 'react-i18next';
 
 const Home = ({ setUserRole }) => {
+  const { t } = useTranslation();
   const [appointments, setAppointments] = useState([]);
   const [notifications, setNotifications] = useState({ alerts: "" });
   const [year, setYear] = useState(new Date().getFullYear());
@@ -104,7 +106,7 @@ const Home = ({ setUserRole }) => {
         <div className="widgetsSection">
           <div className="heading">
             <img src={support} width={30} height={30} alt="" />
-            <h2 className="widgetsHeading">What Experts Have to Say Today</h2>
+            <h2 className="widgetsHeading">{t('expert_advice')}</h2>
           </div>
           <div className="widgetsContainer">
             {blogPosts.length > 0 ? (
@@ -124,7 +126,7 @@ const Home = ({ setUserRole }) => {
         
         <div className="notifications-appointments">
           <section className="notifications1">
-            <h2>Notifications</h2>
+            <h2>{t('notifications_title')}</h2>
             <ul>
               {notifications.alerts ? (
                 notifications.alerts
@@ -134,14 +136,14 @@ const Home = ({ setUserRole }) => {
                     <li key={index}>{cleanMarkdown(alert)}</li>
                   ))
               ) : (
-                <li>No notifications available.</li>
+                <li>{t('no_notifications')}</li>
               )}
             </ul>
 
           </section>
           
           <section className="appointments1">
-            <h2>Upcoming Appointments</h2>
+            <h2>{t('upcoming_appointments')}</h2>
             <ul>
               {appointments.length > 0 ? (
                 appointments.map((appointment) => (
@@ -152,13 +154,13 @@ const Home = ({ setUserRole }) => {
                     </div>
                     {appointment.status === 'accepted' && (
                       <button className="join-call-btn" onClick={() => handleJoinCall(appointment._id)}>
-                        Join Video Call
+                        {t('join_call')}
                       </button>
                     )}
                   </li>
                 ))
               ) : (
-                <li>No appointments found.</li>
+                <li>{t('no_appointments')}</li>
               )}
             </ul>
           </section>
@@ -170,21 +172,13 @@ const Home = ({ setUserRole }) => {
               type="number"
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              placeholder="Enter year"
+              placeholder={t('enter_year')}
               min="2000"
               max="2100"
             />
             <RevenueChart year={year} />
           </div>
           <TaskCompletionChart completed={completedTasks} total={totalTasks} />
-        </div>
-
-        <div className="crop-stats">
-          <GrowthProgressTracker/>
-          
-          {Array.isArray(crops) && crops.map((crop) => (
-            <WaterUsageGraph key={crop._id} cropId={crop._id} cropName={crop.name} />
-          ))}
         </div>
 
         {/* <div className="news">

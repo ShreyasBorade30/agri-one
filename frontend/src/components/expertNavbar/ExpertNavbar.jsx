@@ -31,7 +31,7 @@ const ExpertNavbar = () => {
           <div className="item" onClick={toggleTheme} style={{ cursor: 'pointer' }}>
             {theme === "light" ? <DarkModeIcon className="icon" /> : <LightModeIcon className="icon" />}
           </div>
-          <Link to="/expert-profile" style={{ textDecoration: "none" }}>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
             <div className="item profileImg">
               <img src={profileImg} alt="Profile" />
             </div>

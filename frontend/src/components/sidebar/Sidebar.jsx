@@ -14,10 +14,11 @@ import "./Sidebar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/webLogo.png';
 import newRequest from "../../utils/newRequest.js";
+import { useTranslation } from 'react-i18next';
 
 // commented out the following imports as they are not used in this component
 const Sidebar = ({setUserRole}) => {
-
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleLogout = async()=>{
@@ -48,70 +49,58 @@ const Sidebar = ({setUserRole}) => {
           <Link to="/weather_report" style={{ textDecoration: "none" }}>
             <div className="card">
               <WeatherIcon className="icon" />
-              <span>Weather Report</span>
-            </div>
-          </Link>
-          <Link to="/farming_recommendations" style={{ textDecoration: "none" }}>
-            <div className="card">
-              <FarmingIcon className="icon" />
-              <span>Farming Recommendations</span>
+              <span>{t('weather_report')}</span>
             </div>
           </Link>
           <Link to="/task_scheduling" style={{ textDecoration: "none" }}>
             <div className="card">
               <TaskIcon className="icon" />
-              <span>Task Scheduling</span>
+              <span>{t('task_scheduling')}</span>
             </div>
           </Link>
           <Link to="/appointments" style={{ textDecoration: "none" }}>
             <div className="card">
               <AppointmentIcon className="icon" />
-              <span>Book Appointments</span>
+              <span>{t('book_appointments')}</span>
             </div>
           </Link>
           <Link to="/revenue_record" style={{ textDecoration: "none" }}>
             <div className="card">
               <RevenueIcon className="icon" />
-              <span>Revenue Recording</span>
-            </div>
-          </Link>
-          <Link to="/crop_details_management" style={{ textDecoration: "none" }}>
-            <div className="card">
-              <CropIcon className="icon" />
-              <span>Crop Details Management</span>
+              <span>{t('revenue_recording')}</span>
             </div>
           </Link>
           <Link to="/labour_directory" style={{ textDecoration: "none" }}>
             <div className="card">
               <PeopleIcon className="icon" />
-              <span>Labour Directory</span>
+              <span>{t('labour_directory')}</span>
             </div>
           </Link>
           <Link to="/advanced_features" style={{ textDecoration: "none" }}>
             <div className="card">
               <StorefrontIcon className="icon" />
-              <span>Marketplace & Services</span>
+              <span>{t('marketplace_services')}</span>
             </div>
           </Link>
           <Link to="/marketplace" style={{ textDecoration: "none" }}>
             <div className="card">
               <ShoppingCartIcon className="icon" />
-              <span>Equipment & Shop</span>
+              <span>{t('equipment_shop')}</span>
+            </div>
+          </Link>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
+            <div className="card">
+              <ProfileIcon className="icon" />
+              <span>{t('profile')}</span>
             </div>
           </Link>
         </div>
 
         <div className="profile-actions">
-          <Link to="/profile" style={{ textDecoration: "none" }}>
-            <div className="action">
-              <ProfileIcon className="icon" />
-              <span>Profile</span>
-            </div>
-          </Link>
           {/* <Link to="/signout" style={{ textDecoration: "none" }}> */}
             <div onClick={handleLogout} className="action">
               <LogoutIcon className="icon" />
-              <span>Logout</span>
+              <span>{t('logout_btn')}</span>
             </div>
           {/* </Link> */}
         </div>

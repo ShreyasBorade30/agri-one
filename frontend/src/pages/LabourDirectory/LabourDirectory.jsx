@@ -8,6 +8,8 @@ const LabourDirectory = ({ setUserRole }) => {
   const [labours, setLabours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
+  const [myLabourProfile, setMyLabourProfile] = useState(null);
+  const [showMyStats, setShowMyStats] = useState(false);
   const [formData, setFormData] = useState({
     skills: '',
     dailyWage: '',
@@ -27,8 +29,27 @@ const LabourDirectory = ({ setUserRole }) => {
     }
   };
 
+  const fetchMyProfile = async () => {
+    try {
+      const res = await newRequest.get('/api/labours/my-profile');
+      setMyLabourProfile(res.data);
+      if (res.data) {
+        setFormData({
+          skills: res.data.skills.join(', '),
+          dailyWage: res.data.dailyWage,
+          contact: res.data.contact,
+          location: res.data.location,
+          experience: res.data.experience
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching my labour profile:", err);
+    }
+  };
+
   useEffect(() => {
     fetchLabours();
+    fetchMyProfile();
   }, []);
 
   const handleHire = async (labourId) => {
@@ -49,6 +70,7 @@ const LabourDirectory = ({ setUserRole }) => {
       alert("Registered as Labour successfully!");
       setShowRegister(false);
       fetchLabours();
+      fetchMyProfile();
     } catch (err) {
       alert("Registration failed");
     }
@@ -62,36 +84,113 @@ const LabourDirectory = ({ setUserRole }) => {
         <div className="content">
           <div className="header">
             <h1>Labour Directory</h1>
-            <button className="register-btn" onClick={() => setShowRegister(!showRegister)}>
-              {showRegister ? "View Labours" : "Register as Labour"}
-            </button>
+            <div className="button-group">
+              {myLabourProfile && (
+                <button className="stats-btn" onClick={() => { setShowMyStats(!showMyStats); setShowRegister(false); }}>
+                  {showMyStats ? "View Directory" : "My Labour Status"}
+                </button>
+              )}
+              <button className="register-btn" onClick={() => { setShowRegister(!showRegister); setShowMyStats(false); }}>
+                {showRegister ? "View Directory" : (myLabourProfile ? "Update My Labour Info" : "Register as Labour")}
+              </button>
+            </div>
           </div>
 
-          {showRegister ? (
+          {showMyStats && myLabourProfile ? (
+            <div className="my-labour-stats">
+              <h2>My Labour Status & History</h2>
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <h3>Current Status</h3>
+                  <span className={`status-badge ${myLabourProfile.status.toLowerCase()}`}>
+                    {myLabourProfile.status}
+                  </span>
+                </div>
+                <div className="stat-card">
+                  <h3>Earnings</h3>
+                  <p className="wage">₹{myLabourProfile.dailyWage} / day</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Experience</h3>
+                  <p className="exp-value">{myLabourProfile.experience} Years</p>
+                </div>
+              </div>
+
+              <div className="hire-history">
+                <h3>Who Hired Me?</h3>
+                {myLabourProfile.hiredBy ? (
+                  <div className="hired-info">
+                    <p><strong>Name:</strong> {myLabourProfile.hiredBy.name}</p>
+                    <p><strong>Email:</strong> {myLabourProfile.hiredBy.email}</p>
+                    <p className="note">Status: You are currently Busy with this employer.</p>
+                  </div>
+                ) : (
+                  <p className="no-data">You are currently Available for hire.</p>
+                )}
+              </div>
+
+              <div className="profile-details">
+                <h3>My Details</h3>
+                <p><strong>Skills:</strong> {myLabourProfile.skills.join(', ')}</p>
+                <p><strong>Location:</strong> {myLabourProfile.location}</p>
+                <p><strong>Contact:</strong> {myLabourProfile.contact}</p>
+              </div>
+            </div>
+          ) : showRegister ? (
             <div className="register-form">
-              <h2>Register as Labour</h2>
+              <h2>{myLabourProfile ? "Update My Labour Info" : "Register as Labour"}</h2>
               <form onSubmit={handleRegister}>
                 <div className="input-field">
                   <label>Skills</label>
-                  <input type="text" placeholder="e.g. Harvesting, Plumping, Driving" onChange={e => setFormData({...formData, skills: e.target.value})} required />
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Harvesting, Plumping, Driving" 
+                    value={formData.skills}
+                    onChange={e => setFormData({...formData, skills: e.target.value})} 
+                    required 
+                  />
                 </div>
                 <div className="input-field">
                   <label>Daily Wage (₹)</label>
-                  <input type="number" placeholder="e.g. 500" onChange={e => setFormData({...formData, dailyWage: e.target.value})} required />
+                  <input 
+                    type="number" 
+                    placeholder="e.g. 500" 
+                    value={formData.dailyWage}
+                    onChange={e => setFormData({...formData, dailyWage: e.target.value})} 
+                    required 
+                  />
                 </div>
                 <div className="input-field">
                   <label>Contact Number</label>
-                  <input type="text" placeholder="Your contact number" onChange={e => setFormData({...formData, contact: e.target.value})} required />
+                  <input 
+                    type="text" 
+                    placeholder="Your contact number" 
+                    value={formData.contact}
+                    onChange={e => setFormData({...formData, contact: e.target.value})} 
+                    required 
+                  />
                 </div>
                 <div className="input-field">
                   <label>Location</label>
-                  <input type="text" placeholder="Your village/city" onChange={e => setFormData({...formData, location: e.target.value})} required />
+                  <input 
+                    type="text" 
+                    placeholder="Your village/city" 
+                    value={formData.location}
+                    onChange={e => setFormData({...formData, location: e.target.value})} 
+                    required 
+                  />
                 </div>
                 <div className="input-field">
                   <label>Experience (Years)</label>
-                  <input type="number" placeholder="Years of experience" onChange={e => setFormData({...formData, experience: e.target.value})} required />
+                  <input 
+                    type="number" 
+                    placeholder="Years of experience" 
+                    value={formData.experience}
+                    onChange={e => setFormData({...formData, experience: e.target.value})} 
+                    required 
+                  />
                 </div>
-                <button type="submit">Submit Registration</button>
+                <button type="submit">{myLabourProfile ? "Update Information" : "Submit Registration"}</button>
               </form>
             </div>
           ) : (

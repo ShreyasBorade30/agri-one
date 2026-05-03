@@ -1,0 +1,147 @@
+.farmer-profile {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 100px);
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2rem;
+    color: #4caf50;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+
+    .profile-img-container {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #4caf50;
+
+      .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .profile-info {
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #333;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+
+    .profile-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+      h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.25rem;
+        color: #2e7d32;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f1f1f1;
+        padding-bottom: 10px;
+
+        .icon-header {
+          color: #4caf50;
+        }
+      }
+
+      .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 18px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .icon {
+          color: #757575;
+          font-size: 1.2rem;
+          margin-top: 4px;
+        }
+
+        .details {
+          display: flex;
+          flex-direction: column;
+
+          label {
+            font-size: 0.8rem;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            font-weight: 600;
+          }
+
+          span {
+            font-size: 1rem;
+            color: #424242;
+            font-weight: 500;
+          }
+        }
+      }
+
+      &.crops-info {
+        .crops-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+
+          .crop-badge {
+            background: #f1f8e9;
+            color: #388e3c;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #c5e1a5;
+          }
+        }
+      }
+
+      &.other-info {
+        p {
+          color: #616161;
+          line-height: 1.6;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

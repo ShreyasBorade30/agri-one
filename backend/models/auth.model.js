@@ -22,7 +22,12 @@ const userSchema = new mongoose.Schema({
     socketId: {
         type: String,
         default: null
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: String
 },
     {
         timestamps: true,

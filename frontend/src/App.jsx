@@ -17,16 +17,17 @@ import ViewBlogPage from './pages/ViewBlogPage/ViewBlogPage.jsx';
 import BlogDetailsExpertPage from './pages/BlogDetailsExpertPage/BlogDetailsExpertPage.jsx';
 import BlogDetailsFarmer from './components/blogDetailsFarmer/BlogDetailsFarmer.jsx';
 import UpdateExpertProfile from './components/UpdateExpertProfile/UpdateExpertProfile.jsx';
-import ProfilePage from './pages/profilePage/ProfilePage.jsx';
 import UpdateFarmerProfile from './components/UpdateFarmerProfile/UpdateFarmerProfile.jsx';
 import ExpertAppointments from './pages/ExpertAppointment/ExpertAppointment.jsx';
 import VideoCallPage from './pages/videoCallPage/VideoCallPage.jsx';
 import VideoCallRoom from './pages/videoCallPage/VideoCallPage.jsx';
 import AddFarmerProfile from './components/addProfile/AddProfile.jsx';
+import ProfilePage from './pages/profilePage/ProfilePage.jsx';
 import AppointmentHistory from './pages/ExpertAppointmentHistory/AppointmentHistory.jsx';
 import LabourDirectory from './pages/LabourDirectory/LabourDirectory.jsx';
 import AdvancedFeatures from './pages/AdvancedFeatures/AdvancedFeatures.jsx';
 import Marketplace from './pages/Marketplace/Marketplace.jsx';
+import VerifyEmail from './pages/Authentication/VerifyEmail.jsx';
 
 function App() {
   const [userRole, setUserRole] = useState(localStorage.getItem("userRole") || null);
@@ -89,10 +90,6 @@ function App() {
       element: <CropDetailsPage setUserRole={setUserRole} />
     },
     {
-      path: '/profile',
-      element: <ProfilePage setUserRole={setUserRole} />
-    },
-    {
       path: '/appointments',
       element: <AppointmentPage setUserRole={setUserRole} />
     },
@@ -136,6 +133,10 @@ function App() {
       element:<VideoCallRoom/>
     },
     {
+      path: "/profile",
+      element: <ProfilePage setUserRole={setUserRole} />
+    },
+    {
       path: "/add-profile",
       element: <AddFarmerProfile/>
     },
@@ -154,6 +155,10 @@ function App() {
     {
       path: "/marketplace",
       element: <Marketplace setUserRole={setUserRole} />
+    },
+    {
+      path: "/verify-email/:token",
+      element: <VerifyEmail />
     }
   ]);
 

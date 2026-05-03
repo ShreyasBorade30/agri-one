@@ -78,7 +78,7 @@ const AdvancedFeatures = ({ setUserRole }) => {
   const [showStartAuction, setShowStartAuction] = useState(false);
 
   // Form States
-  const [auctionForm, setAuctionForm] = useState({ cropName: '', quantity: '', basePrice: '', durationHours: '24' });
+  const [auctionForm, setAuctionForm] = useState({ cropName: '', quantity: '', basePrice: '', durationHours: 24 });
   const [transportForm, setTransportForm] = useState({ transportType: 'Private Truck', fromLocation: '', toLocation: '', weight: '', scheduledDate: '' });
   const [soilForm, setSoilForm] = useState({ landSize: '', location: '' });
 
@@ -158,7 +158,10 @@ const AdvancedFeatures = ({ setUserRole }) => {
       alert("Auction started successfully!");
       setShowStartAuction(false);
       fetchAuctions();
-    } catch (err) { alert("Failed to start auction"); }
+    } catch (err) { 
+      console.error("Auction start error:", err.response?.data || err.message);
+      alert(err.response?.data?.error || "Failed to start auction"); 
+    }
   };
 
   const fetchWarehouses = async () => {
@@ -198,9 +201,6 @@ const AdvancedFeatures = ({ setUserRole }) => {
             </button>
             <button className={activeTab === 'warehouse' ? 'active' : ''} onClick={() => setActiveTab('warehouse')}>
               <WarehouseIcon /> Warehouses
-            </button>
-            <button className={activeTab === 'soil' ? 'active' : ''} onClick={() => setActiveTab('soil')}>
-              <ScienceIcon /> Soil Test
             </button>
             <button className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>
               <HistoryIcon /> My Bids
@@ -311,18 +311,6 @@ const AdvancedFeatures = ({ setUserRole }) => {
                     ))}
                   </div>
                 )}
-              </div>
-            )}
-
-            {activeTab === 'soil' && (
-              <div className="feature-card">
-                <h2>Request Soil Quality Agent</h2>
-                <p>An agent will visit your farm to collect samples.</p>
-                <form onSubmit={handleSoilSubmit}>
-                  <input type="text" placeholder="Land Size (Acres)" onChange={e => setSoilForm({...soilForm, landSize: e.target.value})} required />
-                  <input type="text" placeholder="Farm Location" onChange={e => setSoilForm({...soilForm, location: e.target.value})} required />
-                  <button type="submit">Request Agent Visit</button>
-                </form>
               </div>
             )}
           </div>

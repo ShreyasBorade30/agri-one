@@ -8,25 +8,28 @@
     align-items: center;
     font-size: 14px;
     color: var(--text);
-    background-color: rgba(15, 26, 14, 0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
 
     .navbarContainer {
         display: flex;
         width: 100%;
         align-items: center;
         justify-content: space-between;
-        padding: 20px;
+        padding: 0;
 
         .search {
-            display: flex;
-            width: 30%;
-            align-items: center;
-            padding: 3px;
-            border: 0.5px solid lightgray;
+            background-color: white;
+            border-radius: 100px;
+            padding: 5px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
 
             input {
                 width: 100%;
@@ -57,7 +60,28 @@
                 .icon {
                     font-size: 25px;
                     cursor: pointer;
-                    color: var(--dark-green); // Change icon color to dark green
+                    color: #1b4332; // Explicit dark green
+                }
+
+                &.language-selector {
+                    gap: 5px;
+                    select {
+                        background: white;
+                        border: 1px solid #ddd;
+                        color: #1b4332; // Explicit dark green
+                        outline: none;
+                        cursor: pointer;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-family: inherit;
+                        font-size: 13px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+                        option {
+                            background: var(--bg);
+                            color: var(--text);
+                        }
+                    }
                 }
 
                 .counter {

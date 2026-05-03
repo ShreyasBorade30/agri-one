@@ -65,7 +65,7 @@ const ExpertSidebar = ({ setUserRole }) => {
         </div>
 
         <div className="profile-actions">
-          <Link to="/expert-profile" style={{ textDecoration: "none" }}>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
             <div className="action">
               <ProfileIcon className="icon" />
               <span>Profile</span>

@@ -69,9 +69,9 @@ const Authentication = ({ setUserRole }) => {
         localStorage.setItem("userId", response.data.id || response.data.userId);
       }
       toast.success(response.data.message)
-      setUserRole(role)
-      navigate(role === 'farmer'? '/farmer_home': '/expert_home')
-
+      // setUserRole(role)
+      // navigate(role === 'farmer'? '/farmer_home': '/expert_home')
+      // No navigation after signup - user needs to verify email first
     }catch(error){
       toast.error(error.response?.data?.message || 'Signup failed' )
     }
