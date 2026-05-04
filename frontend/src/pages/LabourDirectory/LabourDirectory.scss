@@ -30,6 +30,30 @@
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
+        .tab-group {
+          display: flex;
+          gap: 10px;
+          background: #f1f3f5;
+          padding: 5px;
+          border-radius: 10px;
+
+          .tab-btn {
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+
+            &.active {
+              background: white;
+              color: #1b4332;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+          }
+        }
+
         h1 {
           color: #1b4332;
           font-size: 28px;
@@ -172,6 +196,158 @@
         }
       }
 
+      .my-posted-jobs {
+        margin-top: 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+        h2 { 
+          color: #1b4332; 
+          margin-bottom: 25px; 
+          font-size: 24px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          &::before {
+            content: '';
+            width: 5px;
+            height: 24px;
+            background: var(--amber);
+            border-radius: 10px;
+          }
+        }
+
+        .cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          gap: 25px;
+
+          .my-job {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-top: 5px solid var(--amber) !important;
+            padding: 20px;
+            border-radius: 12px;
+            transition: transform 0.3s;
+
+            &:hover { transform: translateY(-5px); }
+            
+            .job-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 15px;
+              border-bottom: 1px solid #eee;
+              padding-bottom: 10px;
+
+              h3 { 
+                color: #1b4332; 
+                font-size: 1.3rem; 
+                margin: 0;
+                text-transform: capitalize;
+              }
+
+              .status-badge {
+                font-size: 10px;
+                padding: 4px 12px;
+                border-radius: 100px;
+                text-transform: uppercase;
+                font-weight: 800;
+                &.open { background: #fff4e6; color: #d9480f; }
+              }
+            }
+
+            .job-stats {
+              display: flex;
+              gap: 15px;
+              margin-bottom: 20px;
+
+              .stat-box {
+                flex: 1;
+                background: white;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                border: 1px solid #eee;
+
+                .label { 
+                  display: block; 
+                  font-size: 11px; 
+                  color: #868e96; 
+                  text-transform: uppercase;
+                  margin-bottom: 5px;
+                }
+                .value { 
+                  font-weight: 700; 
+                  color: #2d6a4f; 
+                  font-size: 14px;
+                }
+              }
+            }
+
+            .applicants-list {
+              background: white;
+              padding: 15px;
+              border-radius: 10px;
+              border: 1px solid #eee;
+
+              h4 { 
+                font-size: 13px; 
+                margin-bottom: 12px; 
+                color: #495057;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .count { background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+              }
+
+              .applicant-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #f8f9fa;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 8px;
+                border: 1px solid #f1f3f5;
+
+                .worker-info {
+                  display: flex;
+                  flex-direction: column;
+                  .name { font-weight: 600; color: #212529; font-size: 13px; }
+                  .status-text { font-size: 11px; margin-top: 2px; }
+                }
+
+                .app-status {
+                  font-weight: 700;
+                  &.pending { color: #f08c00; }
+                  &.accepted { color: #2d6a4f; }
+                  &.rejected { color: #c92a2a; }
+                }
+
+                .app-actions {
+                  display: flex;
+                  gap: 5px;
+                  button {
+                    width: auto;
+                    margin-top: 0;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                    border-radius: 6px;
+                    &.accept { background: #2d6a4f; &:hover { background: #1b4332; } }
+                    &.reject { background: #fff5f5; color: #c92a2a; border: 1px solid #ffc9c9; &:hover { background: #ffc9c9; } }
+                  }
+                }
+              }
+              .no-apps { text-align: center; font-size: 12px; color: #adb5bd; padding: 10px 0; }
+            }
+          }
+        }
+      }
+
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -262,6 +438,38 @@
             position: relative;
             overflow: hidden;
             border: 1px solid #f1f3f5;
+
+            &.job-card {
+              border-top: 4px solid #2d6a4f;
+              &::before { display: none; }
+              
+              .job-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 15px;
+
+                h3 { margin: 0; font-size: 1.2rem; }
+                .farmer-name { font-size: 0.8rem; color: #666; font-style: italic; }
+              }
+
+              .job-desc {
+                font-size: 0.9rem;
+                color: #444;
+                margin-bottom: 15px;
+                line-height: 1.4;
+              }
+
+              .job-skill {
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+              }
+
+              button.applied {
+                background-color: #6c757d;
+                cursor: not-allowed;
+              }
+            }
 
             &::before {
               content: '';

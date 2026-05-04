@@ -32,7 +32,14 @@ const orderSchema = new mongoose.Schema({
     quantity: { type: Number, default: 1 }, // Quantity purchased
     razorpayOrderId: { type: String, required: true },
     paymentStatus: { type: String, enum: ['Pending', 'Success', 'Failed'], default: 'Pending' },
-    type: { type: String, enum: ['Purchase', 'Rental'] }
+    type: { type: String, enum: ['Purchase', 'Rental'] },
+    shippingAddress: {
+        name: { type: String, required: true },
+        phone: { type: String, required: true },
+        address: { type: String, required: true },
+        city: { type: String, required: true },
+        pincode: { type: String, required: true }
+    }
 }, { timestamps: true });
 
 export const Equipment = mongoose.model('Equipment', equipmentSchema);

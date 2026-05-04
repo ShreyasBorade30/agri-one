@@ -28,6 +28,7 @@ import weatherRoutes from './routes/weatherRoutes.js';
 import labourRoutes from './routes/labourRoutes.js';
 import advancedRoutes from './routes/advancedFeaturesRoute.js';
 import marketplaceRoutes from './routes/marketplaceRoute.js';
+import jobRoutes from './routes/jobRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,6 +80,7 @@ app.use('/api/labours', labourRoutes);
 app.use('/api/news', farmingNewsRoute);
 app.use('/api/advanced', advancedRoutes);
 app.use('/api/market', marketplaceRoutes);
+app.use('/api/jobs', jobRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', blogRecommendationRoute);
 app.use('/api/expert-details', expertDetailsRoutes);
